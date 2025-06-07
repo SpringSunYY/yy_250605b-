@@ -175,6 +175,20 @@ export const dynamicRoutes = [
         meta: { title: '生成表数据', activeMenu: '/tool/gen' }
       }
     ]
+  },
+  {
+    path: '/manage/goodsDetail',
+    component: Layout,
+    hidden: true,
+    permissions: ['manage:goodsInfo:query'],
+    children: [
+      {
+        path: 'index/:goodsId',
+        component: () => import('@/views/manage/goodsInfo/detail/index'),
+        name: 'GoodsDetail',
+        meta: { title: '商品详情', activeMenu: '/index' }
+      }
+    ]
   }
 ]
 
