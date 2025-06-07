@@ -109,6 +109,15 @@ public class GoodsOrderInfoServiceImpl extends ServiceImpl<GoodsOrderInfoMapper,
      */
     @Override
     public int updateGoodsOrderInfo(GoodsOrderInfo goodsOrderInfo) {
+        //判断商品是否存在
+        GoodsInfo goodsInfo = goodsInfoService.selectGoodsInfoByGoodsId(goodsOrderInfo.getGoodsId());
+        if (StringUtils.isNull(goodsInfo)) {
+            throw new ServiceException("商品不存在！！！");
+        }
+        GoodsOrderInfo goodsOrderInfoDb = this.selectGoodsOrderInfoByOrderId(goodsOrderInfo.getOrderId());
+        if (StringUtils.isNotNull(goodsOrderInfoDb)&&goodsOrderInfoDb.getStatus().equals(MallOrderStatusEnum.ORDER_STATUS_APPROVED.getValue())) {
+            throw new ServiceException("订单已审核！！！");
+        }
         goodsOrderInfo.setUpdateBy(SecurityUtils.getUsername());
         goodsOrderInfo.setUpdateTime(DateUtils.getNowDate());
         return goodsOrderInfoMapper.updateGoodsOrderInfo(goodsOrderInfo);

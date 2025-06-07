@@ -168,7 +168,7 @@
         <el-form-item label="支付凭证" prop="paymentCertificate">
           <image-upload v-model="form.paymentCertificate"/>
         </el-form-item>
-        <el-form-item label="订单状态" prop="status">
+        <el-form-item label="订单状态" prop="status" v-if="checkPermi(['manage:goodsOrderInfo:audit'])">
           <el-radio-group v-model="form.status">
             <el-radio
               v-for="dict in dict.type.mall_order_status"
@@ -198,6 +198,7 @@ import {
   addGoodsOrderInfo,
   updateGoodsOrderInfo
 } from '@/api/manage/goodsOrderInfo'
+import { checkPermi } from '@/utils/permission'
 
 export default {
   name: 'GoodsOrderInfo',
@@ -206,15 +207,15 @@ export default {
     return {
       //表格展示列
       columns: [
-        { key: 0, label: '编号', visible: true },
+        { key: 0, label: '编号', visible: false },
         { key: 1, label: '商品编号', visible: true },
         { key: 2, label: '支付金额', visible: true },
         { key: 3, label: '支付凭证', visible: true },
         { key: 4, label: '订单状态', visible: true },
         { key: 5, label: '用户', visible: true },
         { key: 6, label: '创建时间', visible: true },
-        { key: 7, label: '更新人', visible: true },
-        { key: 8, label: '更新时间', visible: true },
+        { key: 7, label: '更新人', visible: false },
+        { key: 8, label: '更新时间', visible: false },
         { key: 9, label: '备注', visible: true }
       ],
       // 遮罩层
@@ -275,6 +276,7 @@ export default {
     this.getList()
   },
   methods: {
+    checkPermi,
     /** 查询商品订单信息列表 */
     getList() {
       this.loading = true
