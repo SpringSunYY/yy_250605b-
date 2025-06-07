@@ -5,12 +5,18 @@ import java.util.List;
 import java.util.Map;
 import java.util.HashMap;
 import java.util.stream.Collectors;
+
+import com.lz.common.exception.ServiceException;
+import com.lz.common.utils.SecurityUtils;
 import com.lz.common.utils.StringUtils;
 import java.math.BigDecimal;
 import java.util.Date;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.lz.common.utils.DateUtils;
 import javax.annotation.Resource;
+
+import com.lz.manage.model.domain.GoodsCategoryInfo;
+import com.lz.manage.service.IGoodsCategoryInfoService;
 import org.springframework.stereotype.Service;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
@@ -22,7 +28,7 @@ import com.lz.manage.model.vo.goodsInfo.GoodsInfoVo;
 
 /**
  * 商品信息Service业务层处理
- * 
+ *
  * @author YY
  * @date 2025-06-07
  */
@@ -32,10 +38,13 @@ public class GoodsInfoServiceImpl extends ServiceImpl<GoodsInfoMapper, GoodsInfo
     @Resource
     private GoodsInfoMapper goodsInfoMapper;
 
+    @Resource
+    private IGoodsCategoryInfoService goodsCategoryInfoService;
+
     //region mybatis代码
     /**
      * 查询商品信息
-     * 
+     *
      * @param goodsId 商品信息主键
      * @return 商品信息
      */
@@ -47,45 +56,64 @@ public class GoodsInfoServiceImpl extends ServiceImpl<GoodsInfoMapper, GoodsInfo
 
     /**
      * 查询商品信息列表
-     * 
+     *
      * @param goodsInfo 商品信息
      * @return 商品信息
      */
     @Override
     public List<GoodsInfo> selectGoodsInfoList(GoodsInfo goodsInfo)
     {
-        return goodsInfoMapper.selectGoodsInfoList(goodsInfo);
+        List<GoodsInfo> goodsInfos = goodsInfoMapper.selectGoodsInfoList(goodsInfo);
+        for (GoodsInfo info : goodsInfos) {
+            GoodsCategoryInfo goodsCategoryInfo = goodsCategoryInfoService.selectGoodsCategoryInfoByCategoryId(info.getCategoryId());
+            if (StringUtils.isNotNull(goodsCategoryInfo)) {
+                info.setCategoryName(goodsCategoryInfo.getCategoryName());
+            }
+        }
+        return goodsInfos;
     }
 
     /**
      * 新增商品信息
-     * 
+     *
      * @param goodsInfo 商品信息
      * @return 结果
      */
     @Override
     public int insertGoodsInfo(GoodsInfo goodsInfo)
     {
+        GoodsCategoryInfo goodsCategoryInfo = goodsCategoryInfoService.selectGoodsCategoryInfoByCategoryId(goodsInfo.getCategoryId());
+        if (StringUtils.isNull(goodsCategoryInfo)) {
+            throw new ServiceException("商品分类不存在！！！");
+        }
+        //初始化商品数量为0
+        goodsInfo.setStock(0L);
+        goodsInfo.setCreateBy(SecurityUtils.getUsername());
         goodsInfo.setCreateTime(DateUtils.getNowDate());
         return goodsInfoMapper.insertGoodsInfo(goodsInfo);
     }
 
     /**
      * 修改商品信息
-     * 
+     *
      * @param goodsInfo 商品信息
      * @return 结果
      */
     @Override
     public int updateGoodsInfo(GoodsInfo goodsInfo)
     {
+        GoodsCategoryInfo goodsCategoryInfo = goodsCategoryInfoService.selectGoodsCategoryInfoByCategoryId(goodsInfo.getCategoryId());
+        if (StringUtils.isNull(goodsCategoryInfo)) {
+            throw new ServiceException("商品分类不存在！！！");
+        }
+        goodsInfo.setUpdateBy(SecurityUtils.getUsername());
         goodsInfo.setUpdateTime(DateUtils.getNowDate());
         return goodsInfoMapper.updateGoodsInfo(goodsInfo);
     }
 
     /**
      * 批量删除商品信息
-     * 
+     *
      * @param goodsIds 需要删除的商品信息主键
      * @return 结果
      */
@@ -97,7 +125,7 @@ public class GoodsInfoServiceImpl extends ServiceImpl<GoodsInfoMapper, GoodsInfo
 
     /**
      * 删除商品信息信息
-     * 
+     *
      * @param goodsId 商品信息主键
      * @return 结果
      */
