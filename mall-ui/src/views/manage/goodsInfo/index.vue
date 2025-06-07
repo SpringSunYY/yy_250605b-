@@ -9,14 +9,14 @@
           @keyup.enter.native="handleQuery"
         />
       </el-form-item>
-      <el-form-item label="分类编号" prop="categoryId">
-        <el-input
-          v-model="queryParams.categoryId"
-          placeholder="请输入分类编号"
-          clearable
-          @keyup.enter.native="handleQuery"
-        />
-      </el-form-item>
+<!--      <el-form-item label="分类编号" prop="categoryId">-->
+<!--        <el-input-->
+<!--          v-model="queryParams.categoryId"-->
+<!--          placeholder="请输入分类编号"-->
+<!--          clearable-->
+<!--          @keyup.enter.native="handleQuery"-->
+<!--        />-->
+<!--      </el-form-item>-->
       <el-form-item label="商品名称" prop="goodsName">
         <el-input
           v-model="queryParams.goodsName"
