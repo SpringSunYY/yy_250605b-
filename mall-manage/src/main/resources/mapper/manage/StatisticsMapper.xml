@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.lz.manage.mapper.StatisticsMapper">
+    <select id="getLineStatistics" resultType="com.lz.manage.model.statistics.ro.StatisticsRo">
+        SELECT DATE(d.date) AS name, COUNT(t.order_id) AS total
+        FROM (SELECT CURDATE() - INTERVAL seq DAY AS date
+            FROM (SELECT 0 AS seq
+            UNION ALL
+            SELECT 1
+            UNION ALL
+            SELECT 2
+            UNION ALL
+            SELECT 3
+            UNION ALL
+            SELECT 4
+            UNION ALL
+            SELECT 5
+            UNION ALL
+            SELECT 6
+            UNION ALL
+            SELECT 7
+            UNION ALL
+            SELECT 8
+            UNION ALL
+            SELECT 9
+            UNION ALL
+            SELECT 10
+            UNION ALL
+            SELECT 11
+            UNION ALL
+            SELECT 12
+            UNION ALL
+            SELECT 13) AS seqs) d
+            LEFT JOIN tb_goods_order_info t
+        ON DATE (t.create_time) = d.date
+        GROUP BY d.date
+        ORDER BY d.date;
+    </select>
+    <select id="getBarStatistics" resultType="com.lz.manage.model.statistics.ro.StatisticsRo">
+        SELECT goods_name as name,
+               stock      as total
+        FROM tb_goods_info
+        ORDER BY goods_id;
+    </select>
+</mapper>
