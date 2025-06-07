@@ -5,6 +5,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.HashMap;
 import java.util.stream.Collectors;
+
+import com.lz.common.utils.SecurityUtils;
 import com.lz.common.utils.StringUtils;
 import java.util.Date;
 import com.fasterxml.jackson.annotation.JsonFormat;
@@ -21,7 +23,7 @@ import com.lz.manage.model.vo.goodsCategoryInfo.GoodsCategoryInfoVo;
 
 /**
  * 商品分类信息Service业务层处理
- * 
+ *
  * @author YY
  * @date 2025-06-07
  */
@@ -34,7 +36,7 @@ public class GoodsCategoryInfoServiceImpl extends ServiceImpl<GoodsCategoryInfoM
     //region mybatis代码
     /**
      * 查询商品分类信息
-     * 
+     *
      * @param categoryId 商品分类信息主键
      * @return 商品分类信息
      */
@@ -46,7 +48,7 @@ public class GoodsCategoryInfoServiceImpl extends ServiceImpl<GoodsCategoryInfoM
 
     /**
      * 查询商品分类信息列表
-     * 
+     *
      * @param goodsCategoryInfo 商品分类信息
      * @return 商品分类信息
      */
@@ -58,33 +60,35 @@ public class GoodsCategoryInfoServiceImpl extends ServiceImpl<GoodsCategoryInfoM
 
     /**
      * 新增商品分类信息
-     * 
+     *
      * @param goodsCategoryInfo 商品分类信息
      * @return 结果
      */
     @Override
     public int insertGoodsCategoryInfo(GoodsCategoryInfo goodsCategoryInfo)
     {
+        goodsCategoryInfo.setCreateBy(SecurityUtils.getUsername());
         goodsCategoryInfo.setCreateTime(DateUtils.getNowDate());
         return goodsCategoryInfoMapper.insertGoodsCategoryInfo(goodsCategoryInfo);
     }
 
     /**
      * 修改商品分类信息
-     * 
+     *
      * @param goodsCategoryInfo 商品分类信息
      * @return 结果
      */
     @Override
     public int updateGoodsCategoryInfo(GoodsCategoryInfo goodsCategoryInfo)
     {
+        goodsCategoryInfo.setUpdateBy(SecurityUtils.getUsername());
         goodsCategoryInfo.setUpdateTime(DateUtils.getNowDate());
         return goodsCategoryInfoMapper.updateGoodsCategoryInfo(goodsCategoryInfo);
     }
 
     /**
      * 批量删除商品分类信息
-     * 
+     *
      * @param categoryIds 需要删除的商品分类信息主键
      * @return 结果
      */
@@ -96,7 +100,7 @@ public class GoodsCategoryInfoServiceImpl extends ServiceImpl<GoodsCategoryInfoM
 
     /**
      * 删除商品分类信息信息
-     * 
+     *
      * @param categoryId 商品分类信息主键
      * @return 结果
      */
