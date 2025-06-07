@@ -2,6 +2,7 @@ package com.lz.manage.service.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import com.lz.common.annotation.DataScope;
 import com.lz.common.core.domain.entity.SysUser;
 import com.lz.common.exception.ServiceException;
 import com.lz.common.utils.DateUtils;
@@ -58,6 +59,7 @@ public class GoodsOrderInfoServiceImpl extends ServiceImpl<GoodsOrderInfoMapper,
      * @return 商品订单信息
      */
     @Override
+    @DataScope(deptAlias = "tb_goods_order_info", userAlias = "tb_goods_order_info")
     public List<GoodsOrderInfo> selectGoodsOrderInfoList(GoodsOrderInfo goodsOrderInfo) {
         List<GoodsOrderInfo> goodsOrderInfos = goodsOrderInfoMapper.selectGoodsOrderInfoList(goodsOrderInfo);
         for (GoodsOrderInfo info : goodsOrderInfos) {
@@ -115,7 +117,7 @@ public class GoodsOrderInfoServiceImpl extends ServiceImpl<GoodsOrderInfoMapper,
             throw new ServiceException("商品不存在！！！");
         }
         GoodsOrderInfo goodsOrderInfoDb = this.selectGoodsOrderInfoByOrderId(goodsOrderInfo.getOrderId());
-        if (StringUtils.isNotNull(goodsOrderInfoDb)&&goodsOrderInfoDb.getStatus().equals(MallOrderStatusEnum.ORDER_STATUS_APPROVED.getValue())) {
+        if (StringUtils.isNotNull(goodsOrderInfoDb) && goodsOrderInfoDb.getStatus().equals(MallOrderStatusEnum.ORDER_STATUS_APPROVED.getValue())) {
             throw new ServiceException("订单已审核！！！");
         }
         goodsOrderInfo.setUpdateBy(SecurityUtils.getUsername());

@@ -19,14 +19,14 @@
           />
         </el-select>
       </el-form-item>
-      <el-form-item label="用户" prop="userId">
-        <el-input
-          v-model="queryParams.userId"
-          placeholder="请输入用户"
-          clearable
-          @keyup.enter.native="handleQuery"
-        />
-      </el-form-item>
+<!--      <el-form-item label="用户" prop="userId">-->
+<!--        <el-input-->
+<!--          v-model="queryParams.userId"-->
+<!--          placeholder="请输入用户"-->
+<!--          clearable-->
+<!--          @keyup.enter.native="handleQuery"-->
+<!--        />-->
+<!--      </el-form-item>-->
       <el-form-item label="创建时间">
         <el-date-picker
           v-model="daterangeCreateTime"

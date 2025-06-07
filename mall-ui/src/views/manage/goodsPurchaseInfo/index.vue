@@ -126,7 +126,7 @@
       <el-table-column type="selection" width="55" align="center"/>
       <el-table-column label="编号" align="center" v-if="columns[0].visible" prop="purchaseId"/>
       <el-table-column label="商品编号" :show-overflow-tooltip="true" align="center" v-if="columns[1].visible"
-                       prop="goodsId"
+                       prop="goodsName"
       />
       <el-table-column label="进货标题" :show-overflow-tooltip="true" align="center" v-if="columns[2].visible"
                        prop="purchaseTitle"

@@ -34,7 +34,10 @@ export default {
     return {
       // 版本号
       version: '3.8.9',
-      goodsInfoList: []
+      goodsInfoList: [],
+      queryParams: {
+        status: '1'
+      }
     }
   },
   created() {
